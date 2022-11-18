@@ -1,0 +1,159 @@
+# auth
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-service-account
+  namespace: NAMESPACE
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jenkins-sa-binding
+subjects:
+- kind: ServiceAccount
+  name: jenkins-service-account
+  namespace: NAMESPACE
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+# exposing jenkins master
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jenkins-ingress
+  namespace: NAMESPACE
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - host: HOSTNAME
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jenkins-svc
+            port:
+              number: 8080
+  ingressClassName: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-svc
+  namespace: NAMESPACE
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+    - port: 50000
+      targetPort: 50000
+      name: agent
+  selector:
+    name: jenkins
+# creating jenkins master
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jenkins
+  namespace: NAMESPACE
+  labels:
+    name: jenkins
+spec:
+  serviceName: jenkins
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: jenkins
+  template:
+    metadata:
+      name: jenkins
+      labels:
+        name: jenkins
+    spec:
+      serviceAccountName: jenkins-service-account
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: jenkins
+          image: public.ecr.aws/m4u2t0n7/jenkins-master:IMAGEVERSION # change to hub312
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: JAVA_OPTS
+              value: -Djenkins.install.runSetupWizard=false
+            - name: JENKINS_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-master-secret             
+                  key: admin-user 
+            - name: JENKINS_ADMIN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-master-secret             
+                  key: admin-pass
+            - name: GITHUB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-master-secret           
+                  key: github-user 
+            - name: GITHUB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-master-secret            
+                  key: github-pass
+            - name: GITHUB_ORG
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-master-secret             
+                  key: github-org
+            - name: GITHUB_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-master-secret            
+                  key: github-repo 
+            - name: GITHUB_BRANCH
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-master-secret            
+                  key: github-branches                       
+          ports:
+            - name: http-port
+              containerPort: 8080
+            - name: jnlp-port
+              containerPort: 50000
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+      securityContext:
+        fsGroup: 1000
+  volumeClaimTemplates:
+  - metadata:
+      name: jenkins-home
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 6Gi
+### secret file definition with values, ideally values should come from external source such AWS Secrets Manager or Hashicorp Vault
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jenkins-master-secret
+  namespace: NAMESPACE
+type: Opaque
+data:
+  admin-pass: NmhGNVd1ZnJlZmVyZmU=
+  admin-user: MzEyLWFkbWlu
+  github-branches: bWFzdGVyfGZlYXR1cmUtdGVzdA==
+  github-org: MzEyLWJj
+  github-pass: Z2hwX25KNGV4czlxbXU2Q1ltN2lWZkxCNWxoRVdOdWNHcDMxdkh4RA==
+  github-repo: Y2ljZC1kZW1vLTIyYg==
+  github-user: bXNoYWliZWs=
