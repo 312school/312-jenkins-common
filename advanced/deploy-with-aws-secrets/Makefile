@@ -1,7 +1,10 @@
+service = jenkins-master
 stage = dev
 include stages/$(stage)
 
 kubectl := kubectl -n $(namespace)
+aws := aws --region $(region)
+
 
 default: help
 
@@ -20,3 +23,15 @@ stop:
 
 delete-pvc: stop
 	$(kubectl) delete pvc jenkins-home-jenkins-0
+
+# Inject secrets from file to aws
+create-secrets:
+	@bin/aws-secretsmanager-create-secrets.sh $(service) ./aws/secrets
+
+# Inject secrets from file to aws
+update-secrets:
+	@bin/aws-secretsmanager-update-secrets.sh $(service) ./aws/secrets
+
+# Inject secrets from AWS to kube
+inject-secrets:
+	@bin/k8s-secrets-inject-secrets.sh $(service) $(namespace) ./aws/secrets
