@@ -26,7 +26,7 @@
       - `hostname`: to set ingress with a custom hostname. Note that you also need to make sure you have ingress-nginx controller pre-installed on your cluster, and you need to create DNS record pointing this custom hostname to the ingress-nginx load balancer address.
   2. To create resources:
       ~~~bash
-      make run
+      make deploy
       ~~~
   3. To stop or delete resources:
       ~~~bash
