@@ -83,45 +83,45 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jenkins
-          image: ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/alpha/jenkins:IMAGEVERSION
-          imagePullPolicy: Always
+          image: public.ecr.aws/m4u2t0n7/jenkins-master:IMAGEVERSION # change to hub312
+          imagePullPolicy: IfNotPresent
           env:
             - name: JAVA_OPTS
               value: -Djenkins.install.runSetupWizard=false
             - name: JENKINS_ADMIN_USER
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-secret             
+                  name: jenkins-master-secret             
                   key: admin-user 
             - name: JENKINS_ADMIN_PASS
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-secret             
+                  name: jenkins-master-secret             
                   key: admin-pass
             - name: GITHUB_USER
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-secret           
+                  name: jenkins-master-secret           
                   key: github-user 
             - name: GITHUB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-secret            
+                  name: jenkins-master-secret            
                   key: github-pass
             - name: GITHUB_ORG
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-secret             
+                  name: jenkins-master-secret             
                   key: github-org
             - name: GITHUB_REPO
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-secret            
+                  name: jenkins-master-secret            
                   key: github-repo 
             - name: GITHUB_BRANCH
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-secret            
+                  name: jenkins-master-secret            
                   key: github-branches                       
           ports:
             - name: http-port
