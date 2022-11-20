@@ -23,7 +23,7 @@
   1. Edit parameters in `stages/dev` (default) on run as necessary:
       - `version`: to set jenkins master image version.
       - `namespace`: to set namespace for jenkins deployment.
-      - `hostname`: to set ingress with a custom hostname. Note that you also need to make sure you have ingress-nginx controller pre-installed on your cluster, and you need to create DNS record pointing this custom hostname to the ingress-nginx load balancer address.
+      - `hostname`: to set ingress with a custom hostname. *Note that you also need to make sure you have ingress-nginx controller pre-installed on your cluster, and you need to create DNS record pointing this custom hostname to the ingress-nginx load balancer address.*
   2. To create resources:
       ~~~bash
       make deploy
