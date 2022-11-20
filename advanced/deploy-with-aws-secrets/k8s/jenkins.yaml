@@ -83,45 +83,45 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jenkins
-          image: public.ecr.aws/m4u2t0n7/jenkins-master:IMAGEVERSION # change to hub312
-          imagePullPolicy: IfNotPresent
+          image: ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/alpha/jenkins:IMAGEVERSION
+          imagePullPolicy: Always
           env:
             - name: JAVA_OPTS
               value: -Djenkins.install.runSetupWizard=false
             - name: JENKINS_ADMIN_USER
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-master-secret             
+                  name: jenkins-secret             
                   key: admin-user 
             - name: JENKINS_ADMIN_PASS
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-master-secret             
+                  name: jenkins-secret             
                   key: admin-pass
             - name: GITHUB_USER
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-master-secret           
+                  name: jenkins-secret           
                   key: github-user 
             - name: GITHUB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-master-secret            
+                  name: jenkins-secret            
                   key: github-pass
             - name: GITHUB_ORG
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-master-secret             
+                  name: jenkins-secret             
                   key: github-org
             - name: GITHUB_REPO
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-master-secret            
+                  name: jenkins-secret            
                   key: github-repo 
             - name: GITHUB_BRANCH
               valueFrom:
                 secretKeyRef:
-                  name: jenkins-master-secret            
+                  name: jenkins-secret            
                   key: github-branches                       
           ports:
             - name: http-port
@@ -141,19 +141,3 @@ spec:
       resources:
         requests:
           storage: 6Gi
-### secret file definition with values, ideally values should come from external source such AWS Secrets Manager or Hashicorp Vault
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: jenkins-master-secret
-  namespace: NAMESPACE
-type: Opaque
-data:
-  admin-pass: NmhGNVd1ZnJlZmVyZmU=
-  admin-user: MzEyLWFkbWlu
-  github-branches: bWFzdGVyfGZlYXR1cmUtdGVzdA==
-  github-org: MzEyLWJj
-  github-pass: Z2hwX25KNGV4czlxbXU2Q1ltN2lWZkxCNWxoRVdOdWNHcDMxdkh4RA==
-  github-repo: Y2ljZC1kZW1vLTIyYg==
-  github-user: bXNoYWliZWs=
