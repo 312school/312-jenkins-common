@@ -20,3 +20,6 @@ stop:
 
 delete-pvc: stop
 	$(kubectl) delete pvc jenkins-home-jenkins-0
+
+portal:
+	$(kubectl) port-forward jenkins-0 8080:8080
