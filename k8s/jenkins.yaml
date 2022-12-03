@@ -143,6 +143,18 @@ spec:
       resources:
         requests:
           storage: 6Gi
+# dedicated storage class
+---
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard-gp3
+parameters:
+  type: gp3
+provisioner: kubernetes.io/aws-ebs
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
 ### secret file definition with values, ideally values should come from external source such AWS Secrets Manager or Hashicorp Vault
 ---
 apiVersion: v1
@@ -159,14 +171,3 @@ data:
   github-pass: Z2hwX25KNGV4czlxbXU2Q1ltN2lWZkxCNWxoRVdOdWNHcDMxdkh4RA==
   github-repo: Y2ljZC1kZW1vLTIyYg==
   github-user: bXNoYWliZWs=
----
-allowVolumeExpansion: true
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: standard-gp3
-parameters:
-  type: gp3
-provisioner: kubernetes.io/aws-ebs
-reclaimPolicy: Delete
-volumeBindingMode: Immediate
