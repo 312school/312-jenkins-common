@@ -164,10 +164,10 @@ metadata:
   namespace: NAMESPACE
 type: Opaque
 data:
-  admin-pass: NmhGNVd1ZnJlZmVyZmU=    # 6hF5Wufreferfe
-  admin-user: MzEyLWFkbWlu            # 312-admin
-  github-org: MzEyLWJj                # 312-bc
-  github-repo: Y2ljZC1kZW1vLTIyag==
+  admin-pass: NmhGNVd1ZnJlZmVyZmU=        # 6hF5Wufreferfe
+  admin-user: MzEyLWFkbWlu                # 312-admin
+  github-org: MzEyc2Nob29s                # 312school
+  github-repo: Y2ljZC1kZW1vLWNpcmNsZQ==   # cicd-demo-circle
   github-branches: ZGV2ZWxvcA==
   github-user: bXNoYWliZWs=
   github-pass: Z2hwX2hmRlVxUWJTNDJLakhpdlVuYkF4dHNrOEpLVWZUeDN1SHEwQw==
