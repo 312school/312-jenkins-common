@@ -166,8 +166,8 @@ type: Opaque
 data:
   admin-pass: NmhGNVd1ZnJlZmVyZmU=        # 6hF5Wufreferfe
   admin-user: MzEyLWFkbWlu                # 312-admin
-  github-org: MzEyc2Nob29s                # 312school
-  github-repo: Y2ljZC1kZW1vLWNpcmNsZQ==   # cicd-demo-circle
+  github-org: MzEyc2Nob29s                # 312school  CREATE YOUR OWN ORGANIZATION
+  github-repo: Y2ljZC1kZW1vLWNpcmNsZQ==   # cicd-demo-circle CREATE REPO IN YOUR ORGANIZATION WITH THIS NAME
   github-branches: ZGV2ZWxvcA==
   github-user: bXNoYWliZWs=
-  github-pass: Z2hwX2hmRlVxUWJTNDJLakhpdlVuYkF4dHNrOEpLVWZUeDN1SHEwQw==
+  github-pass: Z2hwX2hmRlVxUWJTNDJLakhpdlVuYkF4dHNrOEpLVWZUeDN1SHEwQw==   # CREATE YOUR OWN GH PAT
